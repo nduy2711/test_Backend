@@ -1,14 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 const path = require("path");
+const dotenv = require("dotenv");
 
 const app = express();
 const port = 5000;
+dotenv.config();
 
 // Middleware
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
@@ -77,37 +77,5 @@ app.post("/addNecklace", async (req, res) => {
   }
 });
 
-app.use(cookieParser());
-
-const SECRET_KEY = "SECRET_KEY";
-const CookieName = "user_token";
-
-app.post("/testLogin", (req, res) => {
-  const token = jwt.sign({ user: "guest" }, SECRET_KEY, { expiresIn: "1h" });
-
-  res.cookie(CookieName, token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "Strict",
-  });
-
-  res.json({ message: "Đăng nhập thành công!" });
-});
-
-app.get("/verify", (req, res) => {
-  const token = req.cookies[CookieName];
-
-  if (!token)
-    return res.status(401).json({ message: "Không có quyền truy cập!" });
-
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    res.json({ message: `Truy cập thành công! Xin chào ${decoded.user}` });
-  } catch (error) {
-    res.status(401).json({ message: "Token không hợp lệ!" });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server đang chạy trên cổng ${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
