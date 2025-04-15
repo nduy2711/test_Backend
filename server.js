@@ -6,7 +6,10 @@ const app = express();
 
 // Middleware
 app.use(
-  cors({ credentials: true, origin: "https://test-frontend-kohl.vercel.app/" })
+  cors({
+    credentials: true,
+    origin: "https://test-frontend-8ozlkamuw-nduy2711s-projects.vercel.app",
+  })
 );
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
