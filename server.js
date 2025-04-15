@@ -4,11 +4,12 @@ const path = require("path");
 const dotenv = require("dotenv");
 
 const app = express();
-const port = 5000;
 dotenv.config();
 
 // Middleware
-app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
+app.use(
+  cors({ credentials: true, origin: "https://test-frontend-kohl.vercel.app/" })
+);
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
@@ -77,5 +78,5 @@ app.post("/addNecklace", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Server is running on port ${port}`));
